@@ -1,4 +1,4 @@
-// write a function that returns the sum of two integers
+// write a function that returns the sum of two integers.
 
 int sum(int a, int b) {
   return a + b;
