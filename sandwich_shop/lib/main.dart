@@ -4,18 +4,6 @@ void main() {
   runApp(const App());
 }
 
-class OrderItemDisplay extends StatelessWidget {
-  final String itemType;
-  final int quantity;
-
-  const OrderItemDisplay(this.quantity, this.itemType, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text('$quantity $itemType sandwich(es): ${'🥪' * quantity}');
-  }
-}
-
 class App extends StatelessWidget {
   const App({super.key});
 
@@ -26,9 +14,21 @@ class App extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(title: const Text('Sandwich Counter')),
         body: const Center(
-          child: Text('Welcome to the Sandwich Shop!'),
+          child: OrderItemDisplay(5, 'Footlong'),
         ),
       ),
     );
+  }
+}
+
+class OrderItemDisplay extends StatelessWidget {
+  final int quantity;
+  final String itemType;
+
+  const OrderItemDisplay(this.quantity, this.itemType, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text('$quantity $itemType sandwich(es): ${'🥪' * quantity}');
   }
 }
