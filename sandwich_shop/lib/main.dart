@@ -13,24 +13,28 @@ class App extends StatelessWidget {
       title: 'Sandwich Shop App',
       home: Scaffold(
         appBar: AppBar(title: const Text('Sandwich Counter')),
+        // The updated body: centered Column with sandwich display and Add/Remove buttons
         body: Center(
-          child: Container(
-            width: 220.0,
-            height: 180.0,
-            color: Colors.blue,
-            alignment: Alignment.center,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                const OrderItemDisplay(1, '6-inch'),
-                const SizedBox(height: 8.0),
-                const OrderItemDisplay(2, 'Footlong'),
-                const SizedBox(height: 8.0),
-                const OrderItemDisplay(3, 'Club'),
-              ],
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const OrderItemDisplay(5, 'Footlong'),
+              const SizedBox(height: 12.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => debugPrint('Add button pressed!'),
+                    child: const Text('Add'),
+                  ),
+                  const SizedBox(width: 12.0),
+                  ElevatedButton(
+                    onPressed: () => debugPrint('Remove button pressed!'),
+                    child: const Text('Remove'),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
@@ -48,7 +52,7 @@ class OrderItemDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       '$quantity $itemType sandwich(es): ${'🥪' * quantity}',
-      style: TextStyle(
+      style: const TextStyle(
         color: Colors.green,
         fontWeight: FontWeight.bold,
         fontSize: 18.0,
