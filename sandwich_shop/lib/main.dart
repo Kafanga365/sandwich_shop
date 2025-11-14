@@ -61,12 +61,12 @@ class _OrderScreenState extends State<OrderScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: () => debugPrint('Add button pressed!'),
+                  onPressed: _increaseQuantity,
                   child: const Text('Add'),
                 ),
                 const SizedBox(width: 12.0),
                 ElevatedButton(
-                  onPressed: () => debugPrint('Remove button pressed!'),
+                  onPressed: _decreaseQuantity,
                   child: const Text('Remove'),
                 ),
               ],
