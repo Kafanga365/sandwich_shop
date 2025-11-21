@@ -76,6 +76,7 @@ class _OrderScreenState extends State<OrderScreen> {
   late final OrderRepository _orderRepository;
   final TextEditingController _notesController = TextEditingController();
   bool _isFootlong = true;
+  bool _isToasted = false;
   BreadType _selectedBreadType = BreadType.white;
 
   @override
@@ -159,6 +160,7 @@ class _OrderScreenState extends State<OrderScreen> {
               itemType: sandwichType,
               breadType: _selectedBreadType,
               orderNote: noteForDisplay,
+              isToasted: _isToasted,
             ),
             const SizedBox(height: 20),
             Row(
@@ -170,6 +172,20 @@ class _OrderScreenState extends State<OrderScreen> {
                   onChanged: _onSandwichTypeChanged,
                 ),
                 const Text('footlong', style: normalText),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('untoasted', style: normalText),
+                Switch(
+                  value: _isToasted,
+                  onChanged: (value) {
+                    setState(() => _isToasted = value);
+                  },
+                ),
+                const Text('toasted', style: normalText),
               ],
             ),
             const SizedBox(height: 10),
@@ -221,6 +237,7 @@ class OrderItemDisplay extends StatelessWidget {
   final String itemType;
   final BreadType breadType;
   final String orderNote;
+  final bool isToasted;
 
   const OrderItemDisplay({
     super.key,
@@ -228,6 +245,7 @@ class OrderItemDisplay extends StatelessWidget {
     required this.itemType,
     required this.breadType,
     required this.orderNote,
+    required this.isToasted,
   });
 
   @override
@@ -246,6 +264,8 @@ class OrderItemDisplay extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         Text('Bread: ${breadType.name}', style: normalText),
+        const SizedBox(height: 4),
+        Text('Toasted: ${isToasted ? 'Yes' : 'No'}', style: normalText),
         const SizedBox(height: 4),
         Text('Note: $orderNote',
             style: normalText.copyWith(fontStyle: FontStyle.italic)),

@@ -62,6 +62,7 @@ This project is implemented with a small `OrderRepository` for order state (quan
 - Quantity management with Add / Remove buttons and a configurable max limit
 - Notes text field for special instructions
 - Live visual summary using sandwich emoji
+ - Toasted option (toggle between untoasted and toasted)
 
 ## Tech stack
 
@@ -116,6 +117,7 @@ Open the app and you'll see a simple order UI:
 
 1. Use the size switch to select six-inch or footlong. The order summary will mention the chosen size.
 2. Pick a bread type from the dropdown (White, Wheat, Multigrain). The summary displays the selected bread.
+3. Use the toasted switch to choose whether the sandwich should be toasted. The order summary shows "Toasted: Yes" or "Toasted: No" accordingly.
 3. Press the green "Add" button to increase quantity. Press the red "Remove" button to decrease quantity. Buttons will be disabled when hitting limits (0 or max).
 4. Enter optional notes in the text field (example: "no onions"). Notes appear in the summary.
 5. The summary shows a live count and a repeated sandwich emoji for a fun visual indication.
