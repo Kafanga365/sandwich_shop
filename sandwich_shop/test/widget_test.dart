@@ -14,8 +14,7 @@ void main() {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const App());
 
-    // Verify the placeholder from OrderItemDisplay is present.
-    expect(find.text('This is a placeholder for OrderItemDisplay'),
-        findsOneWidget);
+  // Verify the initial OrderItemDisplay text is present (0 Footlong by default).
+  expect(find.text('0 Footlong sandwich(es): '), findsOneWidget);
   });
 }

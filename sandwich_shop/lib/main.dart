@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sandwich_shop/views/app_styles.dart';
 
 void main() {
   runApp(const App());
@@ -29,6 +30,8 @@ class OrderScreen extends StatefulWidget {
 
 class _OrderScreenState extends State<OrderScreen> {
   int _quantity = 0;
+  // selected sandwich size
+  String _selectedSize = 'Footlong';
 
   void _increaseQuantity() {
     if (_quantity < widget.maxQuantity) {
@@ -52,22 +55,52 @@ class _OrderScreenState extends State<OrderScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            // Size selector (Material 3 SegmentedButton)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: SegmentedButton<String>(
+                segments: const <ButtonSegment<String>>[
+                  ButtonSegment(value: 'Footlong', label: Text('Footlong')),
+                  ButtonSegment(value: 'Six-inch', label: Text('Six-inch')),
+                ],
+                selected: <String>{_selectedSize},
+                onSelectionChanged: (Set<String> newSelection) {
+                  setState(() {
+                    // take the first (and only) selected value
+                    _selectedSize = newSelection.first;
+                  });
+                },
+              ),
+            ),
+            const SizedBox(height: 12.0),
             OrderItemDisplay(
               _quantity,
-              'Footlong',
+              _selectedSize,
             ),
             const SizedBox(height: 12.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                  onPressed: _increaseQuantity,
-                  child: const Text('Add'),
+                SizedBox(
+                  child: ElevatedButton(
+                    onPressed: _increaseQuantity,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      foregroundColor: Colors.white,
+                    ),
+                    child: const Text('Add'),
+                  ),
                 ),
                 const SizedBox(width: 12.0),
-                ElevatedButton(
-                  onPressed: _decreaseQuantity,
-                  child: const Text('Remove'),
+                SizedBox(
+                  child: ElevatedButton(
+                    onPressed: _decreaseQuantity,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      foregroundColor: Colors.white,
+                    ),
+                    child: const Text('Remove'),
+                  ),
                 ),
               ],
             ),
@@ -88,7 +121,7 @@ class OrderItemDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       '$quantity $itemType sandwich(es): ${'🥪' * quantity}',
-      style: const TextStyle(
+      style: normalText.copyWith(
         color: Colors.green,
         fontWeight: FontWeight.bold,
         fontSize: 18.0,
