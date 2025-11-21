@@ -168,6 +168,7 @@ class _OrderScreenState extends State<OrderScreen> {
               children: [
                 const Text('six-inch', style: normalText),
                 Switch(
+                  key: Key("size"),
                   value: _isFootlong,
                   onChanged: _onSandwichTypeChanged,
                 ),

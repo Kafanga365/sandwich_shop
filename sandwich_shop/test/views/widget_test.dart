@@ -31,7 +31,9 @@ void main() {
     expect(find.text('0 footlong sandwich(es): '), findsOneWidget);
 
     // Find the Switch and tap it to toggle to six-inch
-    final Finder sizeSwitch = find.byType(Switch);
+    const sizeKey = Key('size');
+
+    final Finder sizeSwitch = find.byKey(sizeKey);
     expect(sizeSwitch, findsOneWidget);
 
     await tester.tap(sizeSwitch);
