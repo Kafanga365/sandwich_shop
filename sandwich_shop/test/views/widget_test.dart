@@ -21,4 +21,28 @@ void main() {
     // Verify the initial OrderItemDisplay text is present (0 footlong by default).
     expect(find.text('0 footlong sandwich(es): '), findsOneWidget);
   });
+
+  testWidgets('Switch toggles sandwich size between six-inch and footlong',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(const App());
+    await tester.pumpAndSettle();
+
+    // Initially should show footlong
+    expect(find.text('0 footlong sandwich(es): '), findsOneWidget);
+
+    // Find the Switch and tap it to toggle to six-inch
+    final Finder sizeSwitch = find.byType(Switch);
+    expect(sizeSwitch, findsOneWidget);
+
+    await tester.tap(sizeSwitch);
+    await tester.pumpAndSettle();
+
+    // After toggling, the display should update to six-inch
+    expect(find.text('0 six-inch sandwich(es): '), findsOneWidget);
+
+    // Toggle back to footlong to ensure bi-directional behavior
+    await tester.tap(sizeSwitch);
+    await tester.pumpAndSettle();
+    expect(find.text('0 footlong sandwich(es): '), findsOneWidget);
+  });
 }
