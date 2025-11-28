@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sandwich_shop/views/app_styles.dart';
-import 'package:sandwich_shop/repositories/order_repository.dart';
 
 enum BreadType { white, wheat, multigrain }
 
@@ -168,6 +167,7 @@ class _OrderScreenState extends State<OrderScreen> {
               children: [
                 const Text('six-inch', style: normalText),
                 Switch(
+                  // ignore: prefer_const_constructors
                   key: Key("size"),
                   value: _isFootlong,
                   onChanged: _onSandwichTypeChanged,
