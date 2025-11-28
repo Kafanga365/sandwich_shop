@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sandwich_shop/views/app_styles.dart';
-
-enum BreadType { white, wheat, multigrain }
+import 'package:sandwich_shop/models/sandwich.dart';
+import 'package:sandwich_shop/models/cart.dart';enum BreadType { white, wheat, multigrain }
 
 extension BreadTypeName on BreadType {
   String get name {
