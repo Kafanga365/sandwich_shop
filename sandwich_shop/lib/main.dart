@@ -172,103 +172,105 @@ class _OrderScreenState extends State<OrderScreen> {
           style: heading1,
         ),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            if (_confirmationMessage.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16.0),
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: Colors.green.shade100,
-                    border: Border.all(color: Colors.green),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    _confirmationMessage,
-                    style: normalText.copyWith(
-                      color: Colors.green.shade800,
-                      fontWeight: FontWeight.w500,
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              if (_confirmationMessage.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.green.shade100,
+                      border: Border.all(color: Colors.green),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      _confirmationMessage,
+                      style: normalText.copyWith(
+                        color: Colors.green.shade800,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 ),
+              OrderItemDisplay(
+                quantity: _orderRepository.quantity,
+                itemType: sandwichType,
+                breadType: _selectedBreadType,
+                orderNote: noteForDisplay,
+                isToasted: _isToasted,
               ),
-            OrderItemDisplay(
-              quantity: _orderRepository.quantity,
-              itemType: sandwichType,
-              breadType: _selectedBreadType,
-              orderNote: noteForDisplay,
-              isToasted: _isToasted,
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('six-inch', style: normalText),
-                Switch(
-                  // ignore: prefer_const_constructors
-                  key: Key("size"),
-                  value: _isFootlong,
-                  onChanged: _onSandwichTypeChanged,
-                ),
-                const Text('footlong', style: normalText),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('untoasted', style: normalText),
-                Switch(
-                  value: _isToasted,
-                  onChanged: (value) {
-                    setState(() => _isToasted = value);
-                  },
-                ),
-                const Text('toasted', style: normalText),
-              ],
-            ),
-            const SizedBox(height: 10),
-            DropdownMenu<BreadType>(
-              textStyle: normalText,
-              initialSelection: _selectedBreadType,
-              onSelected: _onBreadTypeSelected,
-              dropdownMenuEntries: _buildDropdownEntries(),
-            ),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.all(40.0),
-              child: TextField(
-                key: const Key('notes_textfield'),
-                controller: _notesController,
-                decoration: const InputDecoration(
-                  labelText: 'Add a note (e.g., no onions)',
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('six-inch', style: normalText),
+                  Switch(
+                    // ignore: prefer_const_constructors
+                    key: Key("size"),
+                    value: _isFootlong,
+                    onChanged: _onSandwichTypeChanged,
+                  ),
+                  const Text('footlong', style: normalText),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('untoasted', style: normalText),
+                  Switch(
+                    value: _isToasted,
+                    onChanged: (value) {
+                      setState(() => _isToasted = value);
+                    },
+                  ),
+                  const Text('toasted', style: normalText),
+                ],
+              ),
+              const SizedBox(height: 10),
+              DropdownMenu<BreadType>(
+                textStyle: normalText,
+                initialSelection: _selectedBreadType,
+                onSelected: _onBreadTypeSelected,
+                dropdownMenuEntries: _buildDropdownEntries(),
+              ),
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.all(40.0),
+                child: TextField(
+                  key: const Key('notes_textfield'),
+                  controller: _notesController,
+                  decoration: const InputDecoration(
+                    labelText: 'Add a note (e.g., no onions)',
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                StyledButton(
-                  onPressed: _getIncreaseCallback(),
-                  icon: Icons.add,
-                  label: 'Add',
-                  backgroundColor: Colors.green,
-                ),
-                const SizedBox(width: 8),
-                StyledButton(
-                  onPressed: _getDecreaseCallback(),
-                  icon: Icons.remove,
-                  label: 'Remove',
-                  backgroundColor: Colors.red,
-                ),
-              ],
-            ),
-          ],
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  StyledButton(
+                    onPressed: _getIncreaseCallback(),
+                    icon: Icons.add,
+                    label: 'Add',
+                    backgroundColor: Colors.green,
+                  ),
+                  const SizedBox(width: 8),
+                  StyledButton(
+                    onPressed: _getDecreaseCallback(),
+                    icon: Icons.remove,
+                    label: 'Remove',
+                    backgroundColor: Colors.red,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
