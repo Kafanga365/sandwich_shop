@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sandwich_shop/views/app_styles.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
-import 'package:sandwich_shop/models/cart.dart';
+import 'package:sandwich_shop/repositories/order_repository.dart';
 
 extension BreadTypeName on BreadType {
   String get name {
@@ -77,6 +77,7 @@ class _OrderScreenState extends State<OrderScreen> {
   bool _isFootlong = true;
   bool _isToasted = false;
   BreadType _selectedBreadType = BreadType.white;
+  String _confirmationMessage = '';
 
   @override
   void initState() {
@@ -95,9 +96,26 @@ class _OrderScreenState extends State<OrderScreen> {
 
   VoidCallback? _getIncreaseCallback() {
     if (_orderRepository.canIncrement) {
-      return () => setState(_orderRepository.increment);
+      return () {
+        setState(_orderRepository.increment);
+        _showConfirmationMessage('Item added to cart!');
+      };
     }
     return null;
+  }
+
+  void _showConfirmationMessage(String message) {
+    setState(() {
+      _confirmationMessage = message;
+    });
+    // Clear message after 2 seconds
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        setState(() {
+          _confirmationMessage = '';
+        });
+      }
+    });
   }
 
   VoidCallback? _getDecreaseCallback() {
@@ -158,6 +176,25 @@ class _OrderScreenState extends State<OrderScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            if (_confirmationMessage.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.green.shade100,
+                    border: Border.all(color: Colors.green),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    _confirmationMessage,
+                    style: normalText.copyWith(
+                      color: Colors.green.shade800,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
             OrderItemDisplay(
               quantity: _orderRepository.quantity,
               itemType: sandwichType,
