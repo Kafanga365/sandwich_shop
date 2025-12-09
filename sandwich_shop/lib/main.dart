@@ -180,7 +180,8 @@ class _OrderScreenState extends State<OrderScreen> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
                     color: Colors.green.shade100,
                     border: Border.all(color: Colors.green),
