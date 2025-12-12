@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sandwich_shop/views/app_styles.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
+import 'package:sandwich_shop/models/cart.dart';
 import 'package:sandwich_shop/repositories/order_repository.dart';
+import 'package:sandwich_shop/repositories/pricing_repository.dart';
 
 extension BreadTypeName on BreadType {
   String get name {
@@ -73,6 +75,8 @@ class OrderScreen extends StatefulWidget {
 
 class _OrderScreenState extends State<OrderScreen> {
   late final OrderRepository _orderRepository;
+  late final PricingRepository _pricingRepository;
+  late final Cart _cart;
   final TextEditingController _notesController = TextEditingController();
   bool _isFootlong = true;
   bool _isToasted = false;
@@ -83,6 +87,8 @@ class _OrderScreenState extends State<OrderScreen> {
   void initState() {
     super.initState();
     _orderRepository = OrderRepository(maxQuantity: widget.maxQuantity);
+    _pricingRepository = PricingRepository();
+    _cart = Cart(pricingRepository: _pricingRepository);
     _notesController.addListener(() {
       setState(() {});
     });
@@ -97,7 +103,10 @@ class _OrderScreenState extends State<OrderScreen> {
   VoidCallback? _getIncreaseCallback() {
     if (_orderRepository.canIncrement) {
       return () {
-        setState(_orderRepository.increment);
+        setState(() {
+          _orderRepository.increment();
+          _addCurrentSandwichToCart();
+        });
         _showConfirmationMessage('Item added to cart!');
       };
     }
@@ -120,7 +129,10 @@ class _OrderScreenState extends State<OrderScreen> {
 
   VoidCallback? _getDecreaseCallback() {
     if (_orderRepository.canDecrement) {
-      return () => setState(_orderRepository.decrement);
+      return () => setState(() {
+            _orderRepository.decrement();
+            _removeCurrentSandwichFromCart();
+          });
     }
     return null;
   }
@@ -145,6 +157,35 @@ class _OrderScreenState extends State<OrderScreen> {
       entries.add(newEntry);
     }
     return entries;
+  }
+
+  Sandwich _buildCurrentSandwich() {
+    // Default sandwich type is Veggie Delight; size and bread come from UI state.
+    return Sandwich(
+      type: SandwichType.veggieDelight,
+      isFootlong: _isFootlong,
+      breadType: _selectedBreadType,
+    );
+  }
+
+  void _addCurrentSandwichToCart() {
+    final sandwich = _buildCurrentSandwich();
+    final item = CartItem(sandwich: sandwich, quantity: 1);
+    _cart.addItem(item);
+  }
+
+  void _removeCurrentSandwichFromCart() {
+    final sandwich = _buildCurrentSandwich();
+    final existingIndex = _cart.items.indexWhere((i) => i.sandwich == sandwich);
+    if (existingIndex >= 0) {
+      final existing = _cart.items[existingIndex];
+      final newQty = existing.quantity - 1;
+      if (newQty <= 0) {
+        _cart.removeItem(existing);
+      } else {
+        _cart.updateItemQuantity(existing, newQty);
+      }
+    }
   }
 
   @override
@@ -197,6 +238,13 @@ class _OrderScreenState extends State<OrderScreen> {
                     ),
                   ),
                 ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12.0),
+                child: Text(
+                  'Cart: ${_cart.totalQuantity} item(s) • Total: \$${_cart.getTotal().toStringAsFixed(2)}',
+                  style: normalText.copyWith(fontWeight: FontWeight.w600),
+                ),
+              ),
               OrderItemDisplay(
                 quantity: _orderRepository.quantity,
                 itemType: sandwichType,

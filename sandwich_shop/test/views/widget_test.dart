@@ -47,4 +47,41 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('0 footlong sandwich(es): '), findsOneWidget);
   });
+
+  testWidgets('Cart summary updates item count and total when adding items',
+      (WidgetTester tester) async {
+    final binding = TestWidgetsFlutterBinding.ensureInitialized()
+        as TestWidgetsFlutterBinding;
+    binding.window.physicalSizeTestValue = const Size(800, 1200);
+    binding.window.devicePixelRatioTestValue = 1.0;
+    addTearDown(() {
+      binding.window.clearPhysicalSizeTestValue();
+      binding.window.clearDevicePixelRatioTestValue();
+    });
+
+    await tester.pumpWidget(const App());
+    await tester.pumpAndSettle();
+
+    // Initial cart summary
+    expect(find.text('Cart: 0 item(s) • Total: \$0.00'), findsOneWidget);
+
+    final addButton = find.byIcon(Icons.add);
+    expect(addButton, findsOneWidget);
+
+    // Add one item
+    // With a larger test viewport we should be able to tap without extra scroll.
+    await tester.tap(addButton);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Cart: 1 item(s) • Total: \$8.10'), findsOneWidget);
+
+    // Add a second item
+    await tester.tap(addButton);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Cart: 2 item(s) • Total: \$16.20'), findsOneWidget);
+
+    // Let any timers (confirmation message) complete to avoid pending timers in tests
+    await tester.pump(const Duration(seconds: 3));
+  });
 }
